@@ -1,16 +1,21 @@
 {
-  "name": "ide",
+  "name": "@piarre/ide",
   "version": "0.0.1",
   "description": "",
   "main": "out/index.js",
   "type": "module",
   "bin": {
+    "@piarre/ide": "./bin/ide.cjs",
     "ide": "./bin/ide.cjs"
+  },
+  "publishConfig": {
+    "access": "public"
   },
   "scripts": {
     "dev": "tsc -w",
     "clear": "rm -rf out/",
     "start": "tsc && node .",
+    "build": "node build.js",
     "start:rm": "rm -rf out && tsc && node ."
   },
   "files": [
@@ -31,5 +36,13 @@
     "commander": "^11.1.0",
     "esm": "^3.2.25",
     "execa": "^8.0.1"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Piarre/IDE.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Piarre/IDE/issues"
+  },
+  "homepage": "https://github.com/Piarre/IDE#readme"
 }
