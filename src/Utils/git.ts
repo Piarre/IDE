@@ -4,6 +4,13 @@ import GITIGNORE from "../Constants/GITIGNORE.js";
 import { spinner } from "@clack/prompts";
 import exec from "./exec.js";
 
+/**
+ * Initializes a new Git repository in the specified project path.
+ *
+ * @async
+ * @param {string} projectPath - The path of the project where the Git repository should be initialized.
+ * @throws Will throw an error if the Git commands fail to execute or if the .gitignore file cannot be written.
+ */
 export const init = async (projectPath: string) => {
   const s = spinner();
 
