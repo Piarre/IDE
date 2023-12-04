@@ -10,7 +10,7 @@ import { execa } from "execa";
     force: true,
     recursive: true,
   });
-  await execa("npx", ["tsc"]);
+  await execa("npx", ["tsup"]);
   s.stop("Built");
   outro("✨ Done!");
 })();
