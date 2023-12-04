@@ -1,6 +1,6 @@
 {
   "name": "@piarre/ide",
-  "version": "1.O.1",
+  "version": "1.0.1",
   "description": "",
   "main": "out/index.js",
   "type": "module",
