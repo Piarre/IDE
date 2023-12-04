@@ -12,14 +12,17 @@ export const init = async (project: TypeScriptProject) => {
   const { name, author, description, license, git, dependencies, devDependencies } = project;
 
   let finalName = name;
+  let newName;
 
   intro("🎉 Initializing TypeScript Project");
 
   if (!name) {
-    const newName = await text({
-      message: "Project name",
-      placeholder: "my-project"
-    });
+    while (!newName) {
+      newName = await text({
+        message: "Project name",
+        placeholder: "my-project"
+      });
+    }
 
     finalName = newName as string;
   }
@@ -34,7 +37,7 @@ export const init = async (project: TypeScriptProject) => {
     return process.exit(0);
   }
 
-  s.start(`Creating ${finalName} v0.0.1`);
+  s.start(`Creating ${finalName} 1.0.0`);
 
   await exec("npm", ["init", "-y"]);
 
