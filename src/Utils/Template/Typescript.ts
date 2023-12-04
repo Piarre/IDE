@@ -5,7 +5,7 @@ import * as fs from "fs";
 import modifyJSON from "../JSON.js";
 import path from "path";
 import { isEmpty, mkdir } from "../file.js";
-import GITIGNORE from "../../Constants/GITIGNORE.js";
+import { init as initGit } from "../git.js";
 
 export const init = async (project: TypeScriptProject) => {
   const s = spinner();
@@ -45,7 +45,6 @@ export const init = async (project: TypeScriptProject) => {
   author && pkg("author", author);
 
   pkg("main", "out/index.js");
-  pkg("version", "0.0.1");
   pkg("scripts", {
     "dev": "tsc -w",
     "build": "tsup",
@@ -89,17 +88,7 @@ export default defineConfig({
     }
   }
 
-  if (git) {
-    s.start("Initializing Git");
-
-    await exec(`git`, [`init`]);
-    fs.writeFileSync(path.join(projectPath, ".gitignore"), GITIGNORE);
-    await exec(`git`, [`branch`, `-M`, `main`]);
-    await exec(`git`, [`add`, `.`]);
-    await exec(`git`, [`commit`, `-m`, `🎉 Initial Commit`]);
-
-    s.stop("Git Initialized");
-  }
+  git && await initGit(projectPath);
 
   outro(`🎉 Project ${finalName} created`);
 };
