@@ -1,6 +1,6 @@
-import { TypeScriptProject } from "../../types.js";
+import { TypeScriptProject } from "../../../types.js";
 import { execa } from "execa";
-import { init } from "../git.js";
+import { init } from "../../git.js";
 import { cancel, intro, isCancel, outro, spinner, text } from "@clack/prompts";
 
 export const next = async (option: TypeScriptProject) => {

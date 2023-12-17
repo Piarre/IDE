@@ -1,20 +1,20 @@
-import { TypeScriptProject } from "../../types.js";
+import { TypeScriptProject } from "../../../types.js";
 import { intro, outro, spinner, text } from "@clack/prompts";
 import { execa } from "execa";
 import * as fs from "fs";
-import modifyJSON from "../JSON.js";
+import modifyJSON from "../../JSON.js";
 import path from "path";
-import { isEmpty, mkdir } from "../file.js";
-import { init as initGit } from "../git.js";
+import { isEmpty, mkdir } from "../../file.js";
+import { init as initGit } from "../../git.js";
 
-export const init = async (project: TypeScriptProject) => {
+export const TSLib = async (project: TypeScriptProject) => {
   const s = spinner();
   const { name, author, description, license, git, dependencies, devDependencies } = project;
 
   let finalName = name;
   let newName;
 
-  intro("🎉 Initializing TypeScript Project");
+  intro("🎉 Initializing TypeScript Library");
 
   if (!name) {
     while (!newName) {
@@ -60,17 +60,36 @@ export const init = async (project: TypeScriptProject) => {
 import { defineConfig } from "tsup";
 
 export default defineConfig({
-  entryPoints: ["src/index.ts"],
+  entryPoints: ["src/**/*.ts"],
   format: ["cjs", "esm"],
+  outDir: "out",
   dts: true,
   clean: true,
+  target: "es6",
 });
+`);
+  fs.writeFileSync(path.join(projectPath, "tsconfig.json"),
+    `
+{
+  "compilerOptions": {
+    "module": "CommonJS",
+    "target": "ESNext",
+    "declaration": true,
+    "allowSyntheticDefaultImports": true,
+    "sourceMap": true,
+    "outDir": "./out",
+    "baseUrl": "./",
+    "typeRoots": ["./node_modules/@types", "src/types/*.d.ts"]
+  },
+  "include": ["src/**/*"],
+  "exclude": ["node_modules", "tests"]
+}
 `);
 
   s.stop("Project created");
   s.start("Installing dependencies");
 
-  await exec("npm", ["i", "-D", "typescript", "@types/node", "tsup"]);
+  await exec("npm", ["i", "-D", "typescript", "@types/node", "tsup", "ts-node", "vitest"]);
 
   s.stop("Dependencies installed");
 
@@ -90,5 +109,5 @@ export default defineConfig({
 
   git && await initGit(projectPath);
 
-  outro(`🎉 Project ${finalName} created`);
+  outro(`🎉 Library ${finalName} created`);
 };
