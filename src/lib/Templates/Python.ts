@@ -2,13 +2,11 @@ import { intro, outro, spinner } from "@clack/prompts";
 import { init as initGit } from "../git.js";
 import exec from "../exec.js";
 
-export const python = async (option: { name: string, git: boolean }) => {
+export const NewPythonProject = async (option: { name: string, git: boolean }) => {
   const s = spinner();
   const { name, git } = option;
 
   intro("Initializing Python project");
-
-
 
   if (git) {
     s.start("Initializing Git");

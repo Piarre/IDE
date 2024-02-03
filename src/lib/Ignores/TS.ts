@@ -1,5 +1,4 @@
-const GITIGNORE =
-`lib-cov
+const TSIgnore = `lib-cov
 *.seed
 *.log
 *.csv
@@ -40,5 +39,6 @@ dist/**/*
 
 # ignore yarn.lock
 yarn.lock
-`
-export default GITIGNORE;
+`;
+
+export default TSIgnore;

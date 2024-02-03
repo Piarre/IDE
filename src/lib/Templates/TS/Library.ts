@@ -1,15 +1,16 @@
-import { TypeScriptProject } from "../../../types.js";
 import { intro, outro, spinner, text } from "@clack/prompts";
 import { execa } from "execa";
 import * as fs from "fs";
-import modifyJSON from "../../JSON.js";
 import path from "path";
-import { isEmpty, mkdir } from "../../file.js";
-import { init as initGit } from "../../git.js";
+import { mkdir } from "@/lib/file.js";
+import { TTSProject } from "@/@types/Project.js";
+import modifyJSON from "@/lib/JSON.js";
+import { init } from "@/lib/git.js";
+import TSIgnore from "@/lib/Ignores/TS.js";
 
-export const TSLib = async (project: TypeScriptProject) => {
+export const NewTSLib = async (project: TTSProject) => {
   const s = spinner();
-  const { name, author, description, license, git, dependencies, devDependencies } = project;
+  const { name, author, description, license, git, dependencies, devDependencies, noInstall } = project;
 
   let finalName = name;
   let newName;
@@ -20,7 +21,7 @@ export const TSLib = async (project: TypeScriptProject) => {
     while (!newName) {
       newName = await text({
         message: "Project name",
-        placeholder: "my-project"
+        placeholder: "my-project",
       });
     }
 
@@ -29,8 +30,10 @@ export const TSLib = async (project: TypeScriptProject) => {
 
   const projectPath = path.join(process.cwd(), finalName);
 
-  const exec = async (command: string, args: any[] | string[]) => await execa(command, args, { cwd: projectPath });
-  const pkg = (key: string, newValue: string | Object) => modifyJSON("package.json", key, newValue, { cwd: projectPath });
+  const exec = async (command: string, args: any[] | string[]) =>
+    await execa(command, args, { cwd: projectPath });
+  const pkg = (key: string, newValue: string | Object) =>
+    modifyJSON("package.json", key, newValue, { cwd: projectPath });
 
   if (!mkdir(projectPath)) {
     outro("🥅 Project already exists");
@@ -46,16 +49,17 @@ export const TSLib = async (project: TypeScriptProject) => {
 
   pkg("main", "out/index.js");
   pkg("scripts", {
-    "dev": "tsc -w",
-    "build": "tsup",
-    "clear": "rm -rf out/",
-    "start": "tsc && node .",
-    "start:clean": "rm -rf out && tsc && node ."
+    dev: "tsc -w",
+    build: "tsup",
+    clear: "rm -rf out/",
+    start: "tsc && node .",
+    "start:clean": "rm -rf out && tsc && node .",
   });
 
   fs.mkdirSync(path.join(projectPath, "src"), { recursive: true });
   fs.writeFileSync(path.join(projectPath, "src", "index.ts"), `console.log("Hello World!");`);
-  fs.writeFileSync(path.join(projectPath, "tsup.config.ts"),
+  fs.writeFileSync(
+    path.join(projectPath, "tsup.config.ts"),
     `
 import { defineConfig } from "tsup";
 
@@ -67,13 +71,15 @@ export default defineConfig({
   clean: true,
   target: "es6",
 });
-`);
-  fs.writeFileSync(path.join(projectPath, "tsconfig.json"),
+`
+  );
+  fs.writeFileSync(
+    path.join(projectPath, "tsconfig.json"),
     `
 {
   "compilerOptions": {
     "module": "CommonJS",
-    "target": "ESNext",
+    "target": "ES6",
     "declaration": true,
     "allowSyntheticDefaultImports": true,
     "sourceMap": true,
@@ -84,7 +90,8 @@ export default defineConfig({
   "include": ["src/**/*"],
   "exclude": ["node_modules", "tests"]
 }
-`);
+`
+  );
 
   s.stop("Project created");
   s.start("Installing dependencies");
@@ -93,12 +100,12 @@ export default defineConfig({
 
   s.stop("Dependencies installed");
 
-  if (devDependencies || dependencies) {
+  if ((devDependencies || dependencies) && !noInstall) {
     s.start("Installing additional dependencies");
 
     try {
-      dependencies && await exec(`npm`, [`i`, `-D`, ...dependencies]);
-      devDependencies && await exec(`npm`, [`i`, `-D`, ...devDependencies]);
+      dependencies && (await exec(`npm`, [`i`, `-D`, ...dependencies]));
+      devDependencies && (await exec(`npm`, [`i`, `-D`, ...devDependencies]));
 
       s.stop("Additional dependencies installed");
     } catch (error) {
@@ -107,7 +114,13 @@ export default defineConfig({
     }
   }
 
-  git && await initGit(projectPath);
+  await init(projectPath, project.ignore);
+
+  s.start("Initializing Git");
+
+  git && init(projectPath, TSIgnore);
+
+  s.stop("Git Initialized");
 
   outro(`🎉 Library ${finalName} created`);
 };
