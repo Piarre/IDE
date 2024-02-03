@@ -18,7 +18,9 @@ const modifyJSON = (filePath: string, key: string, newValue: string | Object, op
 
     if (jsonData.hasOwnProperty(key)) {
       jsonData[key] = newValue;
-      fs.writeFileSync(absoluteFilePath, JSON.stringify(jsonData, null, 2));
+      fs.writeFileSync(absoluteFilePath, JSON.stringify(jsonData, null, 2), {
+        encoding: "utf-8"
+      });
     }
   } catch (error) {
     console.error((error as Error).message);
