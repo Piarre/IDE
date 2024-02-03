@@ -1,6 +1,6 @@
 {
   "name": "@piarre/ide",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "",
   "main": "out/index.js",
   "type": "module",
@@ -12,11 +12,13 @@
     "access": "public"
   },
   "scripts": {
-    "dev": "tsc -w",
+    "dev": "npm run clean && tsup --watch",
     "clear": "rm -rf out/",
-    "start": "tsc && node .",
+    "start": "tsup && node .",
     "build": "node build.js",
-    "start:rm": "rm -rf out && tsc && node ."
+    "start:rm": "rm -rf out && tsc && node .",
+    "clean": "rm -rf out",
+    "prepublishOnly": "npm run build"
   },
   "files": [
     "out",
