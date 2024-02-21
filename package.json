@@ -1,13 +1,15 @@
 {
-  "name": "@piarre/ide",
+  "name": "@piarre/idev2",
   "description": "👽️ My CLI to fastly initalize new projects ! 📦️",
   "version": "1.0.0",
   "main": "out/index.js",
   "type": "module",
   "types": "./out/index.d.ts",
   "bin": {
-    "@piarre/ide": "bin/ide.cjs",
     "ide": "bin/ide.cjs"
+  },
+  "publishConfig": {
+    "access": "public"
   },
   "files": [
     "out",
@@ -15,20 +17,23 @@
   ],
   "scripts": {
     "dev": "cp -r src/templates/ out/ && tsup --watch",
-    "build": "tsup",
+    "build": "node build.js",
     "clear": "rm -rf out/",
     "start": "tsup && cp -r src/templates/ out/ && node .",
     "start:clean": "npm run clear && npm run start",
-    "prepublishOnly": "npm run build"
+    "prepublishOnly": "npm run build",
+    "docs:dev": "vitepress dev docs",
+    "docs:build": "vitepress build docs",
+    "docs:preview": "vitepress preview docs"
   },
   "keywords": [],
   "author": "Piarre",
   "license": "ISC",
   "devDependencies": {
     "@types/js-yaml": "^4.0.9",
-    "@types/node": "^20.11.19",
     "tsup": "^8.0.2",
-    "typescript": "^5.3.3"
+    "typescript": "^5.3.3",
+    "vitepress": "^1.0.0-rc.44"
   },
   "dependencies": {
     "@clack/prompts": "^0.7.0",

@@ -43,3 +43,6 @@ tests/**/*
 
 # ignore yarn.lock
 yarn.lock
+
+docs/.vitepress/dist
+docs/.vitepress/cache
