@@ -3,15 +3,21 @@ title: Customization
 ---
 
 # IDE - v2
+
 Customize your own templates
 
 ## File structure
 
 Using a YML file, you can get any template you want !
 
+:::danger
+The `name` property is required, it will be use to give the name to the folder
+:::
+
+
 Here an example with a TypeScript project :
 
-```yaml{1,2,5,6,10,11,25,26}
+```yaml{1,2,5,6,10,11,27,28,33,34}
 # The name will be the command name
 name: ts
 description: Create a TypeScript project
@@ -35,6 +41,14 @@ options:
   - name: "git"
     command: "-g, --git"
     description: "Initialize a git repository"
+    execute:
+      - "git init"
+
+# You can also modify JSON files using
+JSON:
+  - path: package.json
+    key: "description"
+    value: "{{ name }}"
 
 # Here it's the files you want to create with there content
 files:
@@ -78,40 +92,5 @@ files:
 - `description` (string): The description of the command
 - `commands` (string[]): The commands to execute
 - `options` (option[]): The options to add to the command
-- `files` (file[]): The files to create (you can give a path)
-
-## Types
-
-### Template
-
-When the CLI read the yml file, it will create a `Template` object.
-
-```ts
-type template = {
-  name: string;
-  description: string;
-  files?: file[];
-  commands?: string[];
-  options?: option[];
-};
-```
-
-### option
-
-```ts
-type option = {
-  name: string;
-  description: string;
-  command: string;
-  execute?: string[];
-};
-```
-
-### file
-
-```ts
-type file = {
-  path: string;
-  content?: string;
-};
-```
+- `files` (file[]): The files to create
+- `JSON` (JSON[]): The JSON files to modify (you can give a path, a key and a value)
