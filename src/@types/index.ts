@@ -4,6 +4,13 @@ type template = {
   files?: file[];
   commands?: string[];
   options?: option[];
+  JSON?: JSON[];
+};
+
+type JSON = {
+  path: string;
+  key: string;
+  value: string;
 };
 
 type option = {
