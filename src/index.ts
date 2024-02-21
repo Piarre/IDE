@@ -46,8 +46,7 @@ IDE.version("1.0.0");
 
             for (let command of t.options ?? []) {
               const cmd = command.execute;
-              if (cmd && option[command.name])
-                Array.isArray(cmd) ? cmd.forEach((c) => exec(c, process.cwd())) : exec(cmd, process.cwd());
+              if (cmd && option[command.name]) Array.isArray(cmd) ? cmd.forEach((c) => exec(c, projectPath)) : exec(cmd, projectPath);
             }
 
             for (let file of t.files ?? []) {
