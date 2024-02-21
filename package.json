@@ -1,7 +1,7 @@
 {
   "name": "@piarre/idev2",
   "description": "👽️ My CLI to fastly initalize new projects ! 📦️",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "main": "out/index.js",
   "type": "module",
   "types": "./out/index.d.ts",
