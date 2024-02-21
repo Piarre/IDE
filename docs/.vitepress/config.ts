@@ -28,6 +28,14 @@ export default defineConfig({
             text: "Customization",
             link: "/customization",
           },
+          {
+            text: "Types",
+            link: "/types",
+          },
+          {
+            text: "Variables",
+            link: "/variables",
+          },
         ],
       },
     ],
