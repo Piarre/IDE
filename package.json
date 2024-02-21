@@ -1,6 +1,6 @@
 {
-  "name": "idev2",
-  "description": "",
+  "name": "@piarre/ide",
+  "description": "👽️ My CLI to fastly initalize new projects ! 📦️",
   "version": "1.0.0",
   "main": "out/index.js",
   "type": "module",
@@ -18,7 +18,8 @@
     "build": "tsup",
     "clear": "rm -rf out/",
     "start": "tsup && cp -r src/templates/ out/ && node .",
-    "start:clean": "npm run clear && npm run start"
+    "start:clean": "npm run clear && npm run start",
+    "prepublishOnly": "npm run build"
   },
   "keywords": [],
   "author": "Piarre",
