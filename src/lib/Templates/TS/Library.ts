@@ -65,12 +65,13 @@ import { defineConfig } from "tsup";
 
 export default defineConfig({
   entryPoints: ["src/**/*.ts"],
+  target: "esnext",
   format: ["cjs", "esm"],
   outDir: "out",
   dts: true,
   clean: true,
-  target: "es6",
 });
+
 `
   );
   fs.writeFileSync(
@@ -79,13 +80,14 @@ export default defineConfig({
 {
   "compilerOptions": {
     "module": "CommonJS",
-    "target": "ES6",
+    "target": "ESNext",
     "declaration": true,
     "allowSyntheticDefaultImports": true,
-    "sourceMap": true,
     "outDir": "./out",
-    "baseUrl": "./",
-    "typeRoots": ["./node_modules/@types", "src/types/*.d.ts"]
+    "skipLibCheck": true,
+    "inlineSourceMap": true,
+    "typeRoots": ["./node_modules/@types", "./src/@types/*.d.ts"],
+    "declarationDir": "./@types"
   },
   "include": ["src/**/*"],
   "exclude": ["node_modules", "tests"]
