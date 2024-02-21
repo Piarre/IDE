@@ -1,0 +1,46 @@
+{
+  "name": "idev2",
+  "description": "",
+  "version": "1.0.0",
+  "main": "out/index.js",
+  "type": "module",
+  "types": "./out/index.d.ts",
+  "bin": {
+    "@piarre/ide": "bin/ide.cjs",
+    "ide": "bin/ide.cjs"
+  },
+  "files": [
+    "out",
+    "bin"
+  ],
+  "scripts": {
+    "dev": "cp -r src/templates/ out/ && tsup --watch",
+    "build": "tsup",
+    "clear": "rm -rf out/",
+    "start": "tsup && cp -r src/templates/ out/ && node .",
+    "start:clean": "npm run clear && npm run start"
+  },
+  "keywords": [],
+  "author": "Piarre",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/js-yaml": "^4.0.9",
+    "@types/node": "^20.11.19",
+    "tsup": "^8.0.2",
+    "typescript": "^5.3.3"
+  },
+  "dependencies": {
+    "@clack/prompts": "^0.7.0",
+    "commander": "^12.0.0",
+    "execa": "^8.0.1",
+    "js-yaml": "^4.1.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Piarre/IDEv2.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Piarre/IDEv2/issues"
+  },
+  "homepage": "https://github.com/Piarre/IDEv2#readme"
+}

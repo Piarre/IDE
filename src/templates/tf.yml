@@ -1,0 +1,13 @@
+name: tf
+description: Create a Terraform project
+
+options: 
+  - name: "name"
+    command: "-n, --name <name>"
+    description: "Project name"
+
+files:
+  - path: providers.tf
+    content: |
+  - path: credentials.auto.tfvars
+    content: |
