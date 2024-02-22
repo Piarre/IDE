@@ -10,8 +10,10 @@ export const IDE = new Command();
 IDE.version("1.0.0");
 
 (async () => {
+  const __dirname = join(dirname(process.argv[1]), "..");
+
   await readdir(
-    join(process.cwd(), "out", "templates"),
+    join(__dirname, "out", "templates"),
     {
       encoding: "utf8",
       recursive: true,
@@ -19,7 +21,7 @@ IDE.version("1.0.0");
     async (_, files) => {
       for (let template of files) {
         const { name, description, JSON, commands, files, options } = load(
-          readFileSync(join(process.cwd(), "out", "templates", template), "utf8")
+          readFileSync(join(__dirname, "out", "templates", template), "utf8")
         ) as template;
 
         const cmd = IDE.command(name)
@@ -66,7 +68,11 @@ IDE.version("1.0.0");
             for (let json of JSON ?? []) {
               const filePath = join(projectPath, json.path);
 
-              editJSON(filePath, json.key, json.value.replace(/{{ .* }}/g, (match) => option[match.slice(3, -3)]));
+              editJSON(
+                filePath,
+                json.key,
+                json.value.replace(/{{ .* }}/g, (match) => option[match.slice(3, -3)])
+              );
             }
           });
 
