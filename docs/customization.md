@@ -14,6 +14,9 @@ Using a YML file, you can get any template you want !
 The `name` property is required, it will be use to give the name to the folder
 :::
 
+:::info
+Template are read from `~/.ide/` folder. (`C:/Users/%USERNAME%/.ide/` on Windows)
+:::
 
 Here an example with a TypeScript project :
 
