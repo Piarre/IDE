@@ -16,7 +16,7 @@ const devPath = join(process.cwd(), "src", "templates");
   });
   await execa("npx", ["tsup"]);
   mkdirSync(outPath);
-  readdirSync(devPath).forEach((file) => copyFileSync(join(devPath, file), join(outPath, file)));
+  // readdirSync(devPath).forEach((file) => copyFileSync(join(devPath, file), join(outPath, file)));
   s.stop("Built");
   outro("✨ Done!");
 })();
