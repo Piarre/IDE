@@ -3,25 +3,29 @@ import { load } from "js-yaml";
 import { dirname, join } from "path";
 import { template } from "./@types/index.js";
 import { Command } from "commander";
-import editJSON, { exec } from "./lib/utils.js";
+import editJSON, { checkHomedir, exec } from "./lib/utils.js";
+import { homedir } from "os";
 
 export const IDE = new Command();
 
 IDE.version("1.0.0");
 
 (async () => {
-  const __dirname = join(dirname(process.argv[1]), "..");
+  const templateFolder = join(homedir(), ".ide");
 
-  await readdir(
-    join(__dirname, "out", "templates"),
+  checkHomedir();
+
+  readdir(
+    templateFolder,
     {
       encoding: "utf8",
       recursive: true,
     },
     async (_, files) => {
       for (let template of files) {
+        console.log(template)
         const { name, description, JSON, commands, files, options } = load(
-          readFileSync(join(__dirname, "out", "templates", template), "utf8")
+          readFileSync(join(templateFolder, template), "utf8")
         ) as template;
 
         const cmd = IDE.command(name)

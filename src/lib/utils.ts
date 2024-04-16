@@ -1,6 +1,7 @@
 import * as fs from "fs";
 import { execa } from "execa";
 import { join } from "path";
+import { homedir } from "os";
 
 const exec = async (command: string, cwd?: string | URL) =>
   await execa(command, { cwd, encoding: "utf8", shell: true });
@@ -31,6 +32,20 @@ const editJSON = (filePath: string, key: string, newValue: string | Object, opti
   }
 };
 
+const checkHomedir = () => {
+  const templateFolder = join(homedir(), ".ide");
+
+  if (!fs.existsSync(templateFolder)) fs.mkdirSync(templateFolder);
+
+  const templateFiles = fs.readdirSync(templateFolder);
+
+  if (!templateFiles.some((file) => file.endsWith(".yml") || file.endsWith(".yaml"))) {
+    console.error(`No valid templates found in "${templateFolder}". Please add a valid template to continue.`);
+    process.exit(1);
+  }
+
+};
+
 export default editJSON;
 
-export { exec, editJSON };
+export { exec, editJSON, checkHomedir };
