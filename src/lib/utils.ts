@@ -16,7 +16,12 @@ const exec = async (command: string, cwd?: string | URL) =>
  * @param {string} [options.cwd] - The current working directory. If specified, the `filePath` is considered relative to this directory.
  * @throws Will throw an error if the JSON file cannot be read or written, or if the specified key does not exist in the JSON file.
  */
-const editJSON = (filePath: string, key: string, newValue: string | Object, options?: { cwd: string }): void => {
+const editJSON = (
+  filePath: string,
+  key: string,
+  newValue: string | Object,
+  options?: { cwd: string },
+): void => {
   try {
     const absoluteFilePath = options?.cwd ? join(options.cwd, filePath) : filePath;
     const jsonData = JSON.parse(fs.readFileSync(absoluteFilePath, "utf-8"));
@@ -40,12 +45,11 @@ const checkHomedir = () => {
   const templateFiles = fs.readdirSync(templateFolder);
 
   if (!templateFiles.some((file) => file.endsWith(".yml") || file.endsWith(".yaml"))) {
-    console.error(`No valid templates found in "${templateFolder}". Please add a valid template to continue.`);
+    console.error(
+      `No valid templates found in "${templateFolder}". Please add a valid template to continue.`,
+    );
     process.exit(1);
   }
-
 };
-
-export default editJSON;
 
 export { exec, editJSON, checkHomedir };
