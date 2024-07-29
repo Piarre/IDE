@@ -1,10 +1,22 @@
 type template = {
   name: string;
-  description: string;
+  description?: string;
+  version: number;
+  options?: option[];
+};
+
+type V1Template = template & {
   files?: file[];
   commands?: string[];
-  options?: option[];
   JSON?: JSON[];
+};
+
+type V2Template = template & {
+  actions: {
+    files?: file[];
+    commands?: string[];
+    JSON?: JSON[];
+  }[];
 };
 
 type JSON = {
@@ -25,4 +37,4 @@ type file = {
   content?: string;
 };
 
-export { template, option, file };
+export { template, V1Template, V2Template, option, file, JSON };

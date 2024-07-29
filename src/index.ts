@@ -1,14 +1,15 @@
-import { mkdir, mkdirSync, readFileSync, readdir, readdirSync, write, writeFileSync } from "fs";
+import { mkdir, readFileSync, readdir } from "fs";
 import { load } from "js-yaml";
-import { dirname, join } from "path";
-import { template } from "./@types/index.js";
+import { join } from "path";
+import { template, V1Template, V2Template } from "./@types/index.js";
 import { Command } from "commander";
-import editJSON, { checkHomedir, exec } from "./lib/utils.js";
+import { checkHomedir, exec } from "./lib/utils.js";
 import { homedir } from "os";
+import { editJSONs, runCommand, writeFile } from "./lib/actions.js";
 
 export const IDE = new Command();
 
-IDE.version("1.0.0");
+IDE.version("1.0.4");
 
 (async () => {
   const templateFolder = join(homedir(), ".ide");
@@ -23,68 +24,93 @@ IDE.version("1.0.0");
     },
     async (_, files) => {
       for (let template of files) {
-        console.log(template)
-        const { name, description, JSON, commands, files, options } = load(
-          readFileSync(join(templateFolder, template), "utf8")
-        ) as template;
+        const yml = load(readFileSync(join(templateFolder, template), "utf8")) as any;
 
-        const cmd = IDE.command(name)
-          .description(description)
-          .action(async (option: any) => {
-            if (!option.name) {
-              console.error("Project name is required");
-              process.exit(1);
-            }
+        const { name, description, version, options, ...rest } = yml as template;
+        if (!description) return console.error("Description is required");
 
-            const projectPath = join(process.cwd(), option.name);
+        if (version == 1) {
+          const { files, commands, JSON } = rest as V1Template;
 
-            await mkdir(projectPath, (err) => {
-              if (err) {
-                console.error(err);
-                process.exit(1);
+          const cmd = IDE.command(name)
+            .description(description)
+            .action(async (option: any) => {
+              let projectPath = join(process.cwd(), option.name ?? "");
+
+              if (!option.name) projectPath = process.cwd();
+
+              option.name &&
+                (await mkdir(projectPath, (err) => {
+                  if (err) {
+                    console.error(err);
+                    process.exit(1);
+                  }
+                }));
+
+              await runCommand(commands, projectPath);
+
+              await writeFile(files, projectPath, option);
+
+              for (let command of options ?? []) {
+                const cmd = command.execute;
+                if (cmd && option[command.name])
+                  Array.isArray(cmd)
+                    ? cmd.forEach((c) => exec(c, projectPath))
+                    : exec(cmd, projectPath);
               }
+
+              editJSONs(JSON, projectPath, option);
             });
 
-            for (let command of commands ?? []) {
-              const { stdout, stderr } = await exec(command, projectPath);
+          for (let option of options ?? []) {
+            cmd.option(option.command, option.description);
+          }
+        }
 
-              console.log(stdout);
-              console.log(stderr);
-            }
+        if (version == 2) {
+          const { actions, options } = rest as V2Template;
 
-            for (let file of files ?? []) {
-              const filePath = join(projectPath, file.path);
-              const fileContent = file.content ?? "";
+          actions.forEach(async (action) => {
+            const { files, commands, JSON } = action;
 
-              mkdirSync(dirname(filePath), { recursive: true });
-              writeFileSync(
-                filePath,
-                fileContent.replace(/{{ .* }}/g, (match) => option[match.slice(3, -3)])
-              );
-            }
+            const cmd = IDE.command(name)
+              .description(description)
+              .action(async (option: any) => {
+                let projectPath = join(process.cwd(), option.name ?? "");
 
-            for (let command of options ?? []) {
-              const cmd = command.execute;
-              if (cmd && option[command.name])
-                Array.isArray(cmd) ? cmd.forEach((c) => exec(c, projectPath)) : exec(cmd, projectPath);
-            }
+                if (!option.name) projectPath = process.cwd();
 
-            for (let json of JSON ?? []) {
-              const filePath = join(projectPath, json.path);
+                if (option.name != undefined) {
+                  await mkdir(projectPath, (err) => {
+                    if (err) {
+                      console.error(err);
+                      process.exit(1);
+                    }
+                  });
+                }
 
-              editJSON(
-                filePath,
-                json.key,
-                json.value.replace(/{{ .* }}/g, (match) => option[match.slice(3, -3)])
-              );
+                if (action.files) await writeFile(files, projectPath, option);
+
+                if (action.commands) await runCommand(commands, projectPath);
+
+                if (action.JSON) editJSONs(JSON, projectPath, option);
+
+                for (let command of options ?? []) {
+                  const cmd = command.execute;
+                  if (cmd && option[command.name])
+                    Array.isArray(cmd)
+                      ? cmd.forEach((c) => exec(c, projectPath))
+                      : exec(cmd, projectPath);
+                }
+              });
+
+            for (let option of options ?? []) {
+              cmd.option(option.command, option.description);
             }
           });
-
-        for (let option of options ?? []) {
-          cmd.option(option.command, option.description);
         }
       }
-    }
+    },
   );
 
   IDE.parse(process.argv);
