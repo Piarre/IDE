@@ -16,27 +16,27 @@ export default defineConfig({
 
     sidebar: [
       {
-        text: "Setup",
+        text: "General",
         items: [
           {
+            items: [{ text: "Installation", link: "/setup" }],
+          },
+          {
+            text: "Templates",
             items: [
-              { text: "Installation", link: "/setup" },
-              { text: "License", link: "/license" },
+              { text: "V1", link: "/templates/v1" },
+              { text: "V2", link: "/templates/v2" },
             ],
-          },
-          {
-            text: "Customization",
-            link: "/customization",
-          },
-          {
-            text: "Types",
-            link: "/types",
           },
           {
             text: "Variables",
             link: "/variables",
           },
         ],
+      },
+      {
+        text: "Misc",
+        items: [{ text: "License", link: "/license" }],
       },
     ],
 
