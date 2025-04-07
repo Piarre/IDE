@@ -33,7 +33,7 @@ const editJSON = (
       });
     }
   } catch (error) {
-    console.error((error as Error).message);
+    console.error(error instanceof Error ? error.message : error);
   }
 };
 
