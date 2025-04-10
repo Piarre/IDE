@@ -1,52 +1,24 @@
 {
-  "name": "@piarre/idev2",
-  "description": "👽️ My CLI to fastly initalize new projects ! 📦️",
-  "version": "1.0.4",
-  "main": "out/index.js",
+  "name": "ide",
+  "module": "src/index.ts",
   "type": "module",
-  "types": "./out/index.d.ts",
-  "bin": {
-    "ide": "bin/ide.cjs"
-  },
-  "publishConfig": {
-    "access": "public"
-  },
-  "files": [
-    "out",
-    "bin"
-  ],
   "scripts": {
-    "dev": "cp -r src/templates/ out/ && tsup --watch",
-    "build": "node build.js",
-    "clear": "rm -rf out/",
-    "start": "tsup && cp -r src/templates/ out/ && node .",
-    "start:clean": "npm run clear && npm run start",
-    "prepublishOnly": "npm run build",
-    "docs:dev": "vitepress dev docs",
-    "docs:build": "vitepress build docs",
-    "docs:preview": "vitepress preview docs"
+    "dev": "bun run src/index.ts",
+    "build": "bun build src/index.ts --outdir=dist --target=bun --minify "
   },
-  "keywords": [],
-  "author": "Piarre",
-  "license": "ISC",
+  "bin": {
+    "ide": "dist/index.js"
+  },
+  "files": ["dist"],
   "devDependencies": {
-    "@types/js-yaml": "^4.0.9",
-    "tsup": "^8.0.2",
-    "typescript": "^5.3.3",
-    "vitepress": "^1.0.0-rc.44"
+    "@types/bun": "latest"
+  },
+  "peerDependencies": {
+    "typescript": "^5.0.0"
   },
   "dependencies": {
-    "@clack/prompts": "^0.7.0",
-    "commander": "^12.0.0",
-    "execa": "^8.0.1",
+    "@types/js-yaml": "^4.0.9",
+    "commander": "^13.1.0",
     "js-yaml": "^4.1.0"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/Piarre/IDEv2.git"
-  },
-  "bugs": {
-    "url": "https://github.com/Piarre/IDEv2/issues"
-  },
-  "homepage": "https://github.com/Piarre/IDEv2#readme"
+  }
 }
