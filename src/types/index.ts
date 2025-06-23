@@ -23,25 +23,29 @@ type file = {
   content?: string;
 };
 
+type DisplayTemplateAction = {
+  displayTemplate: boolean;
+};
+
 type template = {
   name: string;
   description?: string;
   version: number;
   options?: option[];
 } & (
-  | {
+  | ({
       // V1
       files?: file[];
       commands?: string[];
       JSON?: JSON[];
-    }
+    } & DisplayTemplateAction)
   | {
       // V2
-      actions: {
+      actions: ({
         files?: file[];
-        commands?: string[];
+        commands?: string | string[];
         JSON?: JSON[];
-      }[];
+      } & DisplayTemplateAction)[];
     }
 );
 
