@@ -1,9 +1,18 @@
-// type template = {
-//   name: string;
-//   description?: string;
-//   version: number;
-//   options?: option[];
-// };
+type template = {
+  name: string;
+  description?: string;
+  options?: option[] & {
+    displayTemplate?: boolean;
+    directory?: string;
+    name: string;
+    description?: string;
+  };
+  actions: {
+    files?: file[];
+    commands?: string | string[];
+    JSON?: JSON[];
+  }[];
+};
 
 type JSON = {
   path: string;
@@ -22,31 +31,5 @@ type file = {
   path: string;
   content?: string;
 };
-
-type DisplayTemplateAction = {
-  displayTemplate: boolean;
-};
-
-type template = {
-  name: string;
-  description?: string;
-  version: number;
-  options?: option[];
-} & (
-  | ({
-      // V1
-      files?: file[];
-      commands?: string[];
-      JSON?: JSON[];
-    } & DisplayTemplateAction)
-  | {
-      // V2
-      actions: ({
-        files?: file[];
-        commands?: string | string[];
-        JSON?: JSON[];
-      } & DisplayTemplateAction)[];
-    }
-);
 
 export { type template, type option, type file, type JSON };

@@ -1,18 +1,18 @@
-# 🚀 IDE v2
+# 🚀 IDE v3
 
-> 👽️ A CLI tool to quickly initialize new projects with custom templates! 📦️
+> 👽️ A CLI to quickly initialize new projects from custom templates! 📦️
 
 [![NPM](https://img.shields.io/npm/v/@piarre/idev2.svg)](https://www.npmjs.com/package/@piarre/idev2)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
 ## ✨ Features
 
-- 🧩 Create projects from custom templates
-- 🔍 Define project structure with simple YAML files
-- 🔧 Execute commands as part of the setup process
-- 🧰 Modify JSON files automatically
-- 🔄 Support for variables within templates
-- ⚙️ Multiple version formats (v1 and v2)
+- 🧩 Generate projects from custom YAML templates
+- 🔍 Define project structure easily with YAML
+- 🔧 Run shell commands as part of initialization
+- 🧰 Automatically modify JSON files
+- 🔄 Dynamic variables in templates (`{{ variable }}`)
+- ⚡️ Native Bun support for fast performance
 
 ## 📥 Installation
 
@@ -22,69 +22,73 @@ bun install -g @piarre/idev2
 
 ## 🏁 Quick Start
 
-### 1. Create a template directory
+### 1. Create the templates folder
 
-Templates are stored in `~/.ide/` folder. Create this folder if it doesn't exist yet:
+Templates are stored in the `~/.ide/` directory.
 
 ```bash
 mkdir -p ~/.ide
 ```
 
-### 2. Create a template file
+### 2. Create a YAML template
 
-Create a YAML file in the `~/.ide/` directory with your template definition:
+Example template:
 
 ```yaml
 # ~/.ide/ts.yml
 name: ts
 description: Create a TypeScript project
-
-commands:
-  - "npm init -y"
-  - "npm i -D typescript @types/node tsup ts-node"
-
 options:
   - name: "name"
     command: "-n, --name <n>"
     description: "Project name"
   - name: "git"
     command: "-g, --git"
-    description: "Initialize git repository"
+    description: "Initialize a git repository"
     execute:
       - "git init"
-
-files:
-  - path: src/index.ts
-    content: |
-      console.log("Hello, {{ name }}!");
-  - path: tsconfig.json
-    content: |
-      {
-        "compilerOptions": {
-          "module": "CommonJS",
-          "target": "ESNext",
-          "outDir": "./out",
-          "skipLibCheck": true
-        },
-        "include": ["src/**/*"],
-        "exclude": ["node_modules"]
-      }
+actions:
+  - files:
+      - path: src/index.ts
+        content: |
+          console.log("Hello, {{ name }}!");
+      - path: tsconfig.json
+        content: |
+          {
+            "compilerOptions": {
+              "module": "CommonJS",
+              "target": "ESNext",
+              "outDir": "./out",
+              "skipLibCheck": true
+            },
+            "include": ["src/**/*"],
+            "exclude": ["node_modules"]
+          }
+    commands:
+      - "npm init -y"
+      - "npm i -D typescript @types/node tsup ts-node"
 ```
 
-### 3. Use your template
+### 3. Generate a project
 
 ```bash
-# Create a new project in a new directory
+# Create a new project in a dedicated folder
 ide ts -n my-project
 
-# Create a project in the current directory
-cd my-empty-project
+# Create in the current directory
+cd empty-folder
 ide ts
+```
+
+### 4. Display a template without running actions
+
+```bash
+ide ts --display-template
 ```
 
 ## 🔄 Template Variables
 
-You can use variables in your templates using the `{{ variable }}` syntax. These variables correspond to the options defined in your template.
+Use `{{ variable }}` in your YAML files or commands to inject values passed as options.
 
 ```yaml
 options:
@@ -98,11 +102,14 @@ files:
       # Project by {{ username }}
 ```
 
-When running the command with `-u john`, the template will replace `{{ username }}` with `john`.
+## 🛠️ Advanced Options
+
+- `--directory <name>`: Create the project in a specific directory
+- `--display-template`: Show the template content without running actions
 
 ## 📚 Documentation
 
-For more detailed documentation, visit [ide.piarre.app](https://ide.piarre.app/).
+More info at [ide.piarre.app](https://ide.piarre.app/).
 
 ## 📜 License
 

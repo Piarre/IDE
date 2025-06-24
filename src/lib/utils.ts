@@ -15,7 +15,7 @@ const editJSON = async (
   filePath: string,
   key: string,
   newValue: string | Object,
-  options?: { cwd: string }
+  options?: { cwd: string },
 ): Promise<void> => {
   try {
     const absoluteFilePath = options?.cwd ? join(options.cwd, filePath) : filePath;
@@ -38,7 +38,7 @@ const writeFiles = async (files: any, path: string, option: any) => {
     await mkdir(dirname(filePath), { recursive: true });
     await Bun.write(
       filePath,
-      fileContent.replace(/{{ .* }}/g, (match: string) => option[match.slice(3, -3)])
+      fileContent.replace(/{{ .* }}/g, (match: string) => option[match.slice(3, -3)]),
     );
   }
 };
@@ -53,22 +53,25 @@ const checkHomedir = async () => {
   const filesExist = await Array.fromAsync(await glob.scan(".")).then((files) => files.length > 0);
 
   if (!filesExist) {
-    console.error(`No valid templates found in "${templateFolder}". Please add a valid template to continue.`);
+    console.error(
+      `No valid templates found in "${templateFolder}". Please add a valid template to continue.`,
+    );
     process.exit(1);
   }
 };
-``;
 
 const displayFile = (content: string, language: string = "yml") => {
-  return console.log(highlight(content, {
-    language: "yaml",
-    theme: {
-      comment: (x) => `\x1b[90m${x}\x1b[0m`,
-      string: (x) => `\x1b[32m${x}\x1b[0m`,
-      number: (x) => `\x1b[33m${x}\x1b[0m`,
-      attr: (x) => `\x1b[31m${x}\x1b[0m`,
-    },
-  }));
+  return console.log(
+    highlight(content, {
+      language: "yaml",
+      theme: {
+        comment: (x) => `\x1b[90m${x}\x1b[0m`,
+        string: (x) => `\x1b[32m${x}\x1b[0m`,
+        number: (x) => `\x1b[33m${x}\x1b[0m`,
+        attr: (x) => `\x1b[31m${x}\x1b[0m`,
+      },
+    }),
+  );
 };
 
 export { exec, editJSON, checkHomedir, writeFiles, displayFile };

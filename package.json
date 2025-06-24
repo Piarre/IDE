@@ -1,10 +1,13 @@
 {
   "name": "ide",
   "module": "src/index.ts",
+  "version": "3.0.0",
   "type": "module",
   "scripts": {
     "dev": "bun run src/index.ts",
-    "build": "bun build src/index.ts --outdir=dist --target=bun --minify"
+    "build": "bun build src/index.ts --outdir=dist --target=bun --minify",
+    "prettier": "prettier --write 'src/**/*.ts'",
+    "prepublishOnly": "bun run build"
   },
   "bin": {
     "ide": "dist/index.js"
@@ -12,6 +15,10 @@
   "files": [
     "dist"
   ],
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
+  },
   "devDependencies": {
     "@types/bun": "latest"
   },
