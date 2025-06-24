@@ -7,7 +7,10 @@
     "dev": "bun run src/index.ts",
     "build": "bun build src/index.ts --outdir=dist --target=bun --minify",
     "prettier": "prettier --write 'src/**/*.ts'",
-    "prepublishOnly": "bun run build"
+    "prepublishOnly": "bun run build",
+    "docs:dev": "vitepress dev docs",
+    "docs:build": "vitepress build docs",
+    "docs:preview": "vitepress preview docs"
   },
   "bin": {
     "ide": "dist/index.js"
@@ -20,7 +23,8 @@
     "registry": "https://registry.npmjs.org/"
   },
   "devDependencies": {
-    "@types/bun": "latest"
+    "@types/bun": "latest",
+    "vitepress": "^1.6.3"
   },
   "peerDependencies": {
     "typescript": "^5.0.0"
