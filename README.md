@@ -17,7 +17,7 @@
 ## 📥 Installation
 
 ```bash
-bun install -g @piarre/idev2
+bun install -g @piarre/ide@3.0.0
 ```
 
 ## 🏁 Quick Start
@@ -39,9 +39,6 @@ Example template:
 name: ts
 description: Create a TypeScript project
 options:
-  - name: "name"
-    command: "-n, --name <n>"
-    description: "Project name"
   - name: "git"
     command: "-g, --git"
     description: "Initialize a git repository"
