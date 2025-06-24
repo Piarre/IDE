@@ -64,11 +64,6 @@ actions:
 - Variables in files: use <code v-pre>{{ variable }}</code> to inject option values.
 - Run shell commands and edit JSON files.
 
-## See also
-
-- [API Examples](/api-examples)
-- [Markdown Examples](/markdown-examples)
-
 ---
 
 For more information, see the project README or the template documentation.
