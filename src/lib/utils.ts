@@ -1,5 +1,4 @@
 import { join, dirname } from "path";
-import { homedir } from "os";
 import { mkdir } from "node:fs/promises";
 import highlight from "cli-highlight";
 
@@ -43,23 +42,6 @@ const writeFiles = async (files: any, path: string, option: any) => {
   }
 };
 
-const checkHomedir = async () => {
-  const templateFolder = join(homedir(), ".ide");
-
-  if (!(await Bun.file(templateFolder).exists())) await mkdir(templateFolder, { recursive: true });
-
-  const glob = new Bun.Glob(`${templateFolder}/*.{yml,yaml}`);
-
-  const filesExist = await Array.fromAsync(await glob.scan(".")).then((files) => files.length > 0);
-
-  if (!filesExist) {
-    console.error(
-      `No valid templates found in "${templateFolder}". Please add a valid template to continue.`,
-    );
-    process.exit(1);
-  }
-};
-
 const displayFile = (content: string, language: string = "yml") => {
   return console.log(
     highlight(content, {
@@ -74,4 +56,4 @@ const displayFile = (content: string, language: string = "yml") => {
   );
 };
 
-export { exec, editJSON, checkHomedir, writeFiles, displayFile };
+export { exec, editJSON, writeFiles, displayFile };

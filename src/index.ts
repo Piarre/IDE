@@ -3,10 +3,10 @@ import { Command } from "commander";
 import { homedir } from "os";
 import { join } from "node:path";
 import { load } from "js-yaml";
-import { checkHomedir, displayFile, editJSON, exec, writeFiles } from "@/lib/utils";
+import { displayFile, writeFiles } from "@/lib/utils";
 import type { template } from "@/types";
 import { mkdir } from "node:fs/promises";
-import { editJSONs, executeCommands } from "./lib/actions";
+import { checkHomedir, editJSONs, executeCommands } from "./lib/actions";
 
 export const CLI = new Command();
 
